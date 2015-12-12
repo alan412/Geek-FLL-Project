@@ -15,13 +15,12 @@ HX711 scale(LOADCELL_DATA, LOADCELL_CLK);
 float calibration_factor = 2000; // needs to come from calibration sketch
 
 void setupScale() {
-  scale.set_scale();
   scale.tare();  //Reset the scale to 0
   scale.set_scale(calibration_factor); //Adjust to this calibration factor
 }
 
 float getScaleWeight(){
-  return scale.get_units(5);  // average of 5 readings
+  return scale.get_units(3);  // average of 3 readings
 }
 
 const char pageFirstPart[]="<html>\
