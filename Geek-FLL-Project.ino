@@ -26,9 +26,8 @@ const char pageEnding[]="</body>\
 
 void handleRoot()
 {
- 
   String response = pageFirstPart;
-
+  response += "<h1>Our Geeky Project!</h1>";
   response += pageEnding;
   
   server.send(200, "text/html", response);
