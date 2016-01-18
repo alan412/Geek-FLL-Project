@@ -24,15 +24,15 @@ const char pageSecondPart[]="\
 const char pageEnding[]="</body>\
 </html>";
 
-char result[10];
+char result[20];
 
-const float Filling_weight = 0.5f;  // to be changed
-const float Pickup_weight = 2.0f; // to be changed
+const float Filling_weight = 500.0f;  // to be changed
+const float Pickup_weight = 1000.0f; // to be changed
 
 void handle_weight()
 {
   String filename;
-  
+  digitalWrite(LED_PIN, LOW);
   float weight = scale.get_units(5);
   if(weight < Filling_weight){
     filename = "/Empty.html";
@@ -46,6 +46,7 @@ void handle_weight()
  File file = SPIFFS.open(filename, "r");
  size_t sent = server.streamFile(file, "text/html");
  file.close();
+ digitalWrite(LED_PIN, HIGH);
 }
 
 void handleCalib()
@@ -55,10 +56,16 @@ void handleCalib()
   response += pageSecondPart;
 
   response += "<h1>Our Geeky Prototype</h1>";
-  dtostrf(scale.get_units(5), 1, 1, result);
   
-  response += "weight = ";
+  dtostrf(scale.get_value(), 1, 2, result);
+  response += "raw result = ";
   response += result;
+  
+  dtostrf(scale.get_units(), 1, 2, result);
+  
+  response += "<p/>calib weight = ";
+  response += result;
+  
   response += pageEnding;
   
   server.send(200, "text/html", response);
@@ -70,7 +77,8 @@ void loop()
 }
 
 //const float calibration = 2280.f; // replace once prototype is made
-const float calibration = 4400.f;
+const float calibration = 154.f;  // came from measured known weight
+
 void setup()
 {
   pinMode(LED_PIN, OUTPUT);
