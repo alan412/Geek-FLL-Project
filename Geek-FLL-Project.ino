@@ -17,7 +17,6 @@ const char pageFirstPart[]="<html>\
   <head>";
   
 const char pageSecondPart[]="\
-    <meta http-equiv='refresh' content='2'>\
   </head>\
   <body>";
   
@@ -56,7 +55,8 @@ void handleCalib()
   response += pageSecondPart;
 
   response += "<h1>Our Geeky Prototype</h1>";
-  
+  response += "<p><a href = '/tare'>Tare Here</a></p>";
+   
   dtostrf(scale.get_value(), 1, 2, result);
   response += "raw result = ";
   response += result;
@@ -69,6 +69,12 @@ void handleCalib()
   response += pageEnding;
   
   server.send(200, "text/html", response);
+}
+
+void handleTare() 
+{
+  scale.tare();
+  handleCalib();
 }
 
 void loop()
@@ -92,6 +98,7 @@ void setup()
   scale.set_scale(calibration);
   server.on ( "/", handle_weight );
   server.on ( "/calib", handleCalib );
+  server.on ( "/tare", handleTare );
  
   server.begin();
 }
